@@ -101,9 +101,11 @@ f(x_2) \; = \; 8 \left( \sqrt{x_2} - x_2 + \tfrac{1}{4} \right)^2 - 8 \left( \sq
 \end{alignedat}
 \label{eq:prob1rewrite}
 \end{equation}
-In this form, we must apply a simple one-dimensional root finding algorithm to $x_2$, and then calculate the exact value of $x_1$. Thus the tolerance only applies to $x_2$, and we would need to propagate the error through to determine uncertainty in $x_1$. Since implementing the root-finding procedure is the primary objective of this assignment, we note only that $\epsilon$ can be decreased by the user if they desire a more accurate value of $x_1$.
+In this form, we apply a simple one-dimensional root finding algorithm to $x_2$, and then calculate the exact value of $x_1$.
 
-We use the \textbf{bisection method} to determine $x_2$. First, we calculate values of $f(x)$ at the values $x = \{ x_{2_0}, x_{2_0} \pm h \}$, where $h = 0.1$ is an arbitrary initial guess size for $\max |x_2 - x_{2_0}|$. If the sign of $f(x)$ changes over one of these two intervals, we bisect the interval and evaluate $f(x)$ at the bisection point, recursively approaching the true value of $x_2$. We stop when our interval is less than $\epsilon$. If the sign does not change within the interval $x_{2_0} \pm h$, the user must provide a more accurate guess of $x_{2_0}$, or decrease $h$ in the case of multiple roots.
+We use the \textbf{bisection method} to determine $x_2$. First, we calculate values of $f(x)$ at the values $x = \{ x_{2_0}, x_{2_0} \pm h \}$. If the sign of $f(x)$ changes over one of these two intervals, we bisect the interval and evaluate $f(x)$ at the bisection point, recursively approaching the true value of $x_2$. We stop when our interval is less than $\epsilon$. If the sign does not change within the interval $x_{2_0} \pm h$, the user must provide a more accurate guess of $x_{2_0}$, or decrease $h$ in the case of multiple roots.
+
+For this problem, we choose $h=0.3$ and $x_{2_0} = 0.3$, so that $x_2=0$ is still included in our initial guess, as requested in the problem statement.
 
 \subsection{Problem 2}
 
@@ -115,6 +117,17 @@ We use the \textbf{bisection method} to determine $x_2$. First, we calculate val
 
 \subsection{Problem 1}
 
+We find $\{ x_1, x_2 \} = \{ 0.5000000000, 0.2499999046 \}$. For curiosity's sake, convergence behavior of the solution for $x_2$ is presented in \figref{fig:prob1_convergence}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{Problem1_Convergence.eps}
+\\
+\caption{Convergence behavior of the bisection method as it solves for $x_2$.}
+\label{fig:prob1_convergence}
+\end{center}
+\end{figure}
+
 \subsection{Problem 2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,6 +137,10 @@ We use the \textbf{bisection method} to determine $x_2$. First, we calculate val
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Problem 1}
+
+Analytical evaluation reveals that $\{ x_1, x_2 \} = \{ \tfrac{1}{2}, \tfrac{1}{4} \}$ is the solution to \eqref{eq:prob1}. In this light, the bisection method is entirely adequate in producing the correct solution, but it required 20 steps compared to the presumably fewer steps the secant method would have required.
+
+Furthermore, in solving the $x_2$-equation in \eqref{eq:prob1rewrite} directly rather than the coupled equations in \eqref{eq:prob1}, our numerical tolerance only applies to $x_2$. For a more challenging system of equations, one would need to propagate the tolerance in $x_2$ to determine tolerance in $x_1$. Since implementing the root-finding procedure is the primary objective of this assignment, we note only that $\epsilon$ can be decreased by the user if they desire a more accurate value of $x_1$.
 
 \subsection{Problem 2}
 
@@ -143,7 +160,8 @@ No external references were used other than the course notes for this assignment
 
 The following code listings generate all figures presented in this homework assignment.
 
-%\includecode{Problem_1.m}
+\includecode{Problem_1.m}
+\includecode{Bisect1D.m}
 %\includecode{Problem_2.m}
 
 %%
