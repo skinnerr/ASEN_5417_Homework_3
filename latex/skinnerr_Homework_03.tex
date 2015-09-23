@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+
+\input{../../Latex_Common/skinnerr_latex_preamble_asen5417.tex}
+
+%%
+%% DOCUMENT START
+%%
+
+\begin{document}
+
+\pagestyle{fancyplain}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{\hrule ASEN 5417: Homework 3}
+\cfoot{\hrule \thepage}
+\rfoot{\hrule Ryan Skinner}
+
+\noindent
+{\Large Homework 3}
+\hfill
+{\large Ryan Skinner}
+\\[0.5ex]
+{\large ASEN 5417: Numerical Methods}
+\hfill
+{\large Due 2015/09/29}\\
+\hrule
+\vspace{6pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction} %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We solve the following problems to better understand numerical techniques for solving boundary value problems governed by ordinary differential equations. As will be described in the methods section, our tools primarily consist of simple iteration, the fourth-order Runge-Kutta method, and the secant method.
+
+\subsection{Problem 1}
+
+Solve the system of equations,
+\begin{equation}
+\begin{alignedat}{2}
+x_1 + x_2 - \sqrt{x_2} - \tfrac{1}{4} &= 0 \\
+8 x_1^2 - 8 x_1 x_2 + 16 x_2 - 5      &= 0
+\;,
+\end{alignedat}
+\label{eq:prob1}
+\end{equation}
+by simple iteration, starting with $x_{1_0} = x_{2_0} = 0$, and with an iteration tolerance of $\epsilon = 10^{-6}$.
+
+\subsection{Problem 2}
+
+Calculate the boundary value problem of free convection along a vertical plate. This problem is governed by similarity equations of the form
+\begin{equation}
+\begin{aligned}
+F''' + 3 F F'' - 2F'^2 + \theta &= 0 \\
+\theta'' + 3 \text{Pr} F \theta' &= 0
+\;,
+\end{aligned}
+\end{equation}
+where $\theta = \theta(\eta)$, $F = F(\eta)$. The boundary conditions are
+\begin{equation}
+\begin{aligned}
+\eta = 0 &: &\quad F = F' =\; &0, &\quad \theta =\; &1 \\
+\eta \rightarrow \infty &: &\quad F' \rightarrow\; &0, &\quad \theta \rightarrow\; &0
+\;.
+\end{aligned}
+\end{equation}
+As formulated, this is essentially a "double-shooting" problem. For this homework, we make the following assumptions to simplify analysis.
+\begin{enumerate}
+\item More boundary conditions are known. Specifically,
+\begin{equation}
+\theta' =
+\begin{cases}
+-0.5671 &\text{if Pr} = 1 \\
+-1.17 &\text{if Pr} = 10
+\end{cases}
+\end{equation}
+\item Thus the problem is reduced to a "single-shooting" problem, with coupled equations. Good starting values for the missing BC at $\eta = 0$ are 0.6 for $\text{Pr} = 1$; and 0.41 for $\text{Pr} = 10$.
+\item With $\Delta\eta = 0.02$, integrate these equations over the domain $0 \le \eta \le 10$.
+\end{enumerate}
+
+Use the fourth-order Runge-Kutta method as well as the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$.
+
+Plot $F$, $F'$, and $\theta$ as a function of $\eta$ for each case, and discuss the differences between the two solutions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methodology} %%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Problem 1}
+
+Note that the system \eqref{eq:prob1} can be re-written as
+\begin{equation}
+\begin{alignedat}{2}
+\sqrt{x_2} - x_2 + \tfrac{1}{4} &= x_1 \\
+f(x_2) \; = \; 8 \left( \sqrt{x_2} - x_2 + \tfrac{1}{4} \right)^2 - 8 \left( \sqrt{x_2} - x_2 + \tfrac{1}{4} \right) x_2 + 16 x_2 - 5  &= 0
+\;.
+\end{alignedat}
+\label{eq:prob1rewrite}
+\end{equation}
+In this form, we must apply a simple one-dimensional root finding algorithm to $x_2$, and then calculate the exact value of $x_1$. Thus the tolerance only applies to $x_2$, and we would need to propagate the error through to determine uncertainty in $x_1$. Since implementing the root-finding procedure is the primary objective of this assignment, we note only that $\epsilon$ can be decreased by the user if they desire a more accurate value of $x_1$.
+
+We use the \textbf{bisection method} to determine $x_2$. First, we calculate values of $f(x)$ at the values $x = \{ x_{2_0}, x_{2_0} \pm h \}$, where $h = 0.1$ is an arbitrary initial guess size for $\max |x_2 - x_{2_0}|$. If the sign of $f(x)$ changes over one of these two intervals, we bisect the interval and evaluate $f(x)$ at the bisection point, recursively approaching the true value of $x_2$. We stop when our interval is less than $\epsilon$. If the sign does not change within the interval $x_{2_0} \pm h$, the user must provide a more accurate guess of $x_{2_0}$, or decrease $h$ in the case of multiple roots.
+
+\subsection{Problem 2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Problem 1}
+
+\subsection{Problem 2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Problem 1}
+
+\subsection{Problem 2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{References} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+No external references were used other than the course notes for this assignment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Appendix: MATLAB Code} %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The following code listings generate all figures presented in this homework assignment.
+
+%\includecode{Problem_1.m}
+%\includecode{Problem_2.m}
+
+%%
+%% DOCUMENT END
+%%
+\end{document}
