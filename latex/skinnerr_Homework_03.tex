@@ -66,7 +66,7 @@ where $\theta = \theta(\eta)$, $F = F(\eta)$. The boundary conditions are
 \;.
 \end{aligned}
 \end{equation}
-As formulated, this is essentially a "double-shooting" problem. For this homework, we make the following assumptions to simplify analysis.
+As formulated, this is essentially a "double-shooting" problem. For this homework, we make the following assumptions to simplify analysis:
 \begin{enumerate}
 \item More boundary conditions are known. Specifically,
 \begin{equation}
@@ -80,7 +80,7 @@ As formulated, this is essentially a "double-shooting" problem. For this homewor
 \item With $\Delta\eta = 0.02$, integrate these equations over the domain $0 \le \eta \le 10$.
 \end{enumerate}
 
-Use the fourth-order Runge-Kutta method as well as the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$.
+Use the fourth-order Runge-Kutta method coupled with the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$.
 
 Plot $F$, $F'$, and $\theta$ as a function of $\eta$ for each case, and discuss the differences between the two solutions.
 
@@ -108,6 +108,8 @@ We use the \textbf{bisection method} to determine $x_2$. First, we calculate val
 For this problem, we choose $h=0.3$ and $x_{2_0} = 0.3$, so that $x_2=0$ is still included in our initial guess, as requested in the problem statement.
 
 \subsection{Problem 2}
+
+To integrate the differential equation, we use the standard fourth-order Runge-Kutta (RK4) method. Boundary conditions are known and finite at $\eta = 0$, so this is where we start integration. To approximate $\eta = \infty$, it is sufficient to apply the corresponding `far-field' boundary conditions at $\eta = 10$. Since the exact form of the governing equations is known, the only unknown is $F''(\eta)$ at $\eta = 0$. We seek the appropriate value of $F''(0)$ with the secant method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
