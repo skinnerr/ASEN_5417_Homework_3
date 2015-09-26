@@ -4,6 +4,8 @@ function [ x0, x_guesses ] = Bisect1D( f, x_initial, h, tol )
     % Simple bisection method to find root of function, f(x), based on an initial guess
     %  of the interval (x_initial +/- h). Solution is found when the interval decreases
     %  below the tolerance, tol.
+    %
+    % Ryan Skinner, September 2015
     %%%
     
     % Initialize the three test points.

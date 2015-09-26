@@ -2,7 +2,8 @@ function [] = Problem_1()
 
     %%%%%%
     % Finds the root of a function of two variables, using the bisection method.
-    %   Ryan Skinner, September 2015
+    %
+    % Ryan Skinner, September 2015
     %%%
     
     Set_Default_Plot_Properties();

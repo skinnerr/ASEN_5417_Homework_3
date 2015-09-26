@@ -76,7 +76,7 @@ As formulated, this is essentially a "double-shooting" problem. For this homewor
 -1.17 &\text{if Pr} = 10
 \end{cases}
 \end{equation}
-\item Thus the problem is reduced to a "single-shooting" problem, with coupled equations. Good starting values for the missing BC at $\eta = 0$ are 0.6 for $\text{Pr} = 1$; and 0.41 for $\text{Pr} = 10$.
+\item Thus the problem is reduced to a "single-shooting" problem, with coupled equations. Good starting values for the missing BC at $\eta = 0$ are $F''(0) = \{0.6, 0.41\}$ for $\text{Pr} = \{1, 10\}$.
 \item With $\Delta\eta = 0.02$, integrate these equations over the domain $0 \le \eta \le 10$.
 \end{enumerate}
 
@@ -132,6 +132,19 @@ We find $\{ x_1, x_2 \} = \{ 0.5000000000, 0.2499999046 \}$. For curiosity's sak
 
 \subsection{Problem 2}
 
+We find $F''(0) = \{0.64218, 0.41945\}$ for $\text{Pr} = \{1, 10\}$. Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable are presented in \figref{fig:prob2_plots}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Problem2_F.eps}
+\includegraphics[width=0.7\textwidth]{Problem2_Fprime.eps}
+\includegraphics[width=0.7\textwidth]{Problem2_theta.eps}
+\\
+\caption{Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable $\eta$ for convection along a vertical plate.}
+\label{fig:prob2_plots}
+\end{center}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -164,7 +177,9 @@ The following code listings generate all figures presented in this homework assi
 
 \includecode{Problem_1.m}
 \includecode{Bisect1D.m}
-%\includecode{Problem_2.m}
+\includecode{Problem_2.m}
+\includecode{RK4.m}
+\includecode{Secant1D.m}
 
 %%
 %% DOCUMENT END

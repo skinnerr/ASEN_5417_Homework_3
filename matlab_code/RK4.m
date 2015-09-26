@@ -7,7 +7,7 @@ function [ T, Y ] = RK4( odefun, tspan, N, y0 )
     %              N -- number of time steps
     %             t0 -- vector of initial conditions
     %
-    %   Ryan Skinner, September 2015
+    % Ryan Skinner, September 2015
     %%%
     
     % Number of equations to integrate.
