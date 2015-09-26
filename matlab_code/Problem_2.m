@@ -75,11 +75,11 @@ function dy = convection(~, y, Pr)
     dy(5) = -3 * Pr * y(1) .* y(5);
 end
 
-function val = theta10(Fpp, Pr)
+function val = theta10(Fpp0, Pr)
 
     %%%%%%
     % Returns the value of theta(10) reached by RK4 integration using the given values of
-    %  F'' and Prandtl number.
+    %  F''(0) and Prandtl number.
     %%%
     
     if Pr == 1
@@ -90,7 +90,7 @@ function val = theta10(Fpp, Pr)
         error('Prandl number must be 1 or 10');
     end
     
-    initials = [0, 0, Fpp, 1, thp0];
+    initials = [0, 0, Fpp0, 1, thp0];
     odefun = @(t, y) convection(t, y, Pr);
     [~,Y] = RK4(odefun, [0,10], 500, initials);
     val = Y(end,4);
