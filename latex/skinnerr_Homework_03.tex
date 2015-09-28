@@ -33,7 +33,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We solve the following problems to better understand numerical techniques for solving boundary value problems governed by ordinary differential equations. As will be described in the methods section, our tools primarily consist of simple iteration, the fourth-order Runge-Kutta method, and the secant method.
+We solve the following problems to better understand numerical techniques for root finding. Applications include systems of algebraic equations, and boundary value problems governed by ordinary differential equations. As will be described in the methods section, our tools primarily consist of the bisection method, the fourth-order Runge-Kutta method, and the secant method.
 
 \subsection{Problem 1}
 
@@ -80,7 +80,7 @@ As formulated, this is essentially a "double-shooting" problem. For this homewor
 \item With $\Delta\eta = 0.02$, integrate these equations over the domain $0 \le \eta \le 10$.
 \end{enumerate}
 
-Use the fourth-order Runge-Kutta method coupled with the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$.
+Use the fourth-order Runge-Kutta method coupled with the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$. We choose $\epsilon = 10^{-6}$ for improved accuracy.
 
 Plot $F$, $F'$, and $\theta$ as a function of $\eta$ for each case, and discuss the differences between the two solutions.
 
@@ -103,13 +103,27 @@ f(x_2) \; = \; 8 \left( \sqrt{x_2} - x_2 + \tfrac{1}{4} \right)^2 - 8 \left( \sq
 \end{equation}
 In this form, we apply a simple one-dimensional root finding algorithm to $x_2$, and then calculate the exact value of $x_1$.
 
-We use the \textbf{bisection method} to determine $x_2$. First, we calculate values of $f(x)$ at the values $x = \{ x_{2_0}, x_{2_0} \pm h \}$. If the sign of $f(x)$ changes over one of these two intervals, we bisect the interval and evaluate $f(x)$ at the bisection point, recursively approaching the true value of $x_2$. We stop when our interval is less than $\epsilon$. If the sign does not change within the interval $x_{2_0} \pm h$, the user must provide a more accurate guess of $x_{2_0}$, or decrease $h$ in the case of multiple roots.
+We use the \textbf{bisection method} to determine $x_2$. First, we calculate values of $f(x)$ at the values $x = \{ x_{2_0}, x_{2_0} \pm h \}$. If the sign of $f(x)$ changes over one of these two intervals, we bisect the interval and evaluate $f(x)$ at the bisection point, recursively approaching the true value of $x_2$. We stop when our interval is less than the absolute error $\epsilon$. If the sign does not change within the interval $x_{2_0} \pm h$, the user must provide a more accurate guess of $x_{2_0}$, or decrease $h$ in the case of multiple roots.
 
 For this problem, we choose $h=0.3$ and $x_{2_0} = 0.3$, so that $x_2=0$ is still included in our initial guess, as requested in the problem statement.
 
 \subsection{Problem 2}
 
-To integrate the differential equation, we use the standard fourth-order Runge-Kutta (RK4) method. Boundary conditions are known and finite at $\eta = 0$, so this is where we start integration. To approximate $\eta = \infty$, it is sufficient to apply the corresponding `far-field' boundary conditions at $\eta = 10$. Since the exact form of the governing equations is known, the only unknown is $F''(\eta)$ at $\eta = 0$. We seek the appropriate value of $F''(0)$ with the secant method.
+To integrate the differential equation, we use the standard fourth-order Runge-Kutta (RK4) method, which was detailed at length in Homework 2. Boundary conditions are known and finite at $\eta = 0$, so this is where we start integration. To approximate $\eta = \infty$, it is sufficient to apply the corresponding `far-field' boundary conditions at $\eta = 10$. Since the exact form of the governing equations is known, the only unknown is $F''(0)$.
+
+We seek the appropriate value of $F''(0)$ with the \textbf{secant method}, using the function $f[F''(0)] = F'(10)$ for our root finder. Given two initial guesses $x_1$ and $x_2$ for $F''(0)$, the secant method calculates the next guess $x_{n+1}$ as
+\begin{equation}
+x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
+\;.
+\label{eq:secant}
+\end{equation}
+In our application, of course, $f$ takes the value of $F''(0)$ as input and returns $F'(10)$. Once the condition
+\begin{equation}
+\norm{\frac{x_{n+1} - x_n}{x_n}} < \epsilon
+\;,
+\label{eq:secant_relerr}
+\end{equation}
+is satisfied, where $\epsilon$ is the relative error, solution ceases and the root is declared to occur at $x_0 = x_{n+1}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,15 +146,15 @@ We find $\{ x_1, x_2 \} = \{ 0.5000000000, 0.2499999046 \}$. For curiosity's sak
 
 \subsection{Problem 2}
 
-We find $F''(0) = \{0.64218, 0.41945\}$ for $\text{Pr} = \{1, 10\}$. Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable are presented in \figref{fig:prob2_plots}.
+We find $F''(0) = \{0.64208, 0.41967\}$ for $\text{Pr} = \{1, 10\}$. Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable are presented in \figref{fig:prob2_plots}.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{Problem2_F.eps}
-\includegraphics[width=0.7\textwidth]{Problem2_Fprime.eps}
-\includegraphics[width=0.7\textwidth]{Problem2_theta.eps}
+\includegraphics[width=\textwidth]{Problem2_F.eps}
+\includegraphics[width=\textwidth]{Problem2_Fprime.eps}
+\includegraphics[width=\textwidth]{Problem2_theta.eps}
 \\
-\caption{Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable $\eta$ for convection along a vertical plate.}
+\caption{Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable $\eta$.}
 \label{fig:prob2_plots}
 \end{center}
 \end{figure}
@@ -153,11 +167,23 @@ We find $F''(0) = \{0.64218, 0.41945\}$ for $\text{Pr} = \{1, 10\}$. Plots of $F
 
 \subsection{Problem 1}
 
-Analytical evaluation reveals that $\{ x_1, x_2 \} = \{ \tfrac{1}{2}, \tfrac{1}{4} \}$ is the solution to \eqref{eq:prob1}. In this light, the bisection method is entirely adequate in producing the correct solution, but it required 20 steps compared to the presumably fewer steps the secant method would have required.
+Analytical evaluation reveals that $\{ x_1, x_2 \} = \{ \tfrac{1}{2}, \tfrac{1}{4} \}$ is the solution to \eqref{eq:prob1}. In this light, the bisection method is entirely adequate in producing the correct solution, but it required 20 steps compared to the presumably fewer steps the secant method would have required using the same starting interval.
 
 Furthermore, in solving the $x_2$-equation in \eqref{eq:prob1rewrite} directly rather than the coupled equations in \eqref{eq:prob1}, our numerical tolerance only applies to $x_2$. For a more challenging system of equations, one would need to propagate the tolerance in $x_2$ to determine tolerance in $x_1$. Since implementing the root-finding procedure is the primary objective of this assignment, we note only that $\epsilon$ can be decreased by the user if they desire a more accurate value of $x_1$.
 
 \subsection{Problem 2}
+
+For both $\text{Pr} = 1$ and $\text{Pr} = 10$, the root finder performs well. The boundary conditions $F' \rightarrow 0$ and $\theta \rightarrow 0$ as $\eta \rightarrow \infty$ are satisfied within an absolute tolerance of less than $10^{-5}$.
+
+Initial attempts at solving this problem encountered two difficulties: high sensitivity of the secant method to the initial guesses for $F''(0)$, and stability of the RK4 method. For $\text{Pr} = \{1, 10\}$, the initial guess intervals were $[0.60, 0.61]$ and $[0.41, 0.46]$, respectively. For most values of $\eta$ greater than the upper bound on these relatively small intervals, the RK4 method was unstable, causing the value of $F'(10)$ to blow up and the root finder to fail. This experience demonstrates the importance of understanding the interplay of all numerical methods used in a problem where multiple techniques are employed. As such, shooting methods may not be the best choice for all boundary-value problems, and there are likely cases where finite difference, finite element, or spectral methods are preferred.
+
+To discuss differences between Prandtl numbers, we note that $F$ is the dimensionless stream function (thus $F'$ is the velocity) and $\theta$ is the dimensionless temperature. Furthermore, the similarity variable $\eta$ is proportional to $y$, the distance to the surface. For details on problem formulation, see Ishak (2010).
+
+Since the Prandtl number is the ratio of viscous to thermal diffusion rates, we expect a flow with high Prandtl number to diffuse heat more slowly than momentum. This is indeed the case: the thermal boundary layer is much smaller (less developed due to lower thermal diffusivity) for our $\text{Pr} = 10$ case, meaning a steeper temperature gradient near the wall and thus a higher rate of convective heat transfer from the surface to the fluid.
+
+The same trend manifests in the behavior of $F'$, in that the lower $\text{Pr} = 1$ case has a higher maximum velocity near the surface because momentum diffusivity is higher for that case.
+
+Of course, as $\eta \rightarrow \infty$, both velocity and temperature approach their free-stream values regardless of Prandtl number.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -165,7 +191,7 @@ Furthermore, in solving the $x_2$-equation in \eqref{eq:prob1rewrite} directly r
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-No external references were used other than the course notes for this assignment.
+Ishak, A. (2010). Similarity solutions for flow and heat transfer over a permeable surface with convective boundary condition. \textit{Applied Mathematics and Computation, 217}, 837--842.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

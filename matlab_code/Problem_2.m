@@ -14,8 +14,10 @@ function [] = Problem_2()
     Pr10 = @(x) theta10(x, 10);
     
     % Find value of F'' using the secant method.
-    [a.x0, a.x] = Secant1D(Pr1,  [0.60, 0.65], 1e-3);
-    [b.x0, b.x] = Secant1D(Pr10, [0.41, 0.46], 1e-3);
+    fprintf('Pr = 1\n');
+    [a.x0, a.x] = Secant1D(Pr1,  [0.60, 0.61], 1e-6);
+    fprintf('Pr = 10\n');
+    [b.x0, b.x] = Secant1D(Pr10, [0.41, 0.46], 1e-6);
     
     % Report values of F''.
     fprintf('Pr = 1 :   F''''(0) = %.5f\n', a.x0);
@@ -93,5 +95,5 @@ function val = theta10(Fpp0, Pr)
     initials = [0, 0, Fpp0, 1, thp0];
     odefun = @(t, y) convection(t, y, Pr);
     [~,Y] = RK4(odefun, [0,10], 500, initials);
-    val = Y(end,4);
+    val = Y(end,2);
 end
