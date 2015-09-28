@@ -82,7 +82,7 @@ As formulated, this is essentially a "double-shooting" problem. For this homewor
 
 Use the fourth-order Runge-Kutta method coupled with the secant method to numerically integrate this set of equations for $\text{Pr} = \{1,10\}$. It is sufficient to set the convergence criterion for the root finder to $\epsilon = 10^{-3}$. We choose $\epsilon = 10^{-6}$ for improved accuracy.
 
-Plot $F$, $F'$, and $\theta$ as a function of $\eta$ for each case, and discuss the differences between the two solutions.
+Plot $F$, $F'$, and $\theta$ as a function of $\eta$ for each case, and discuss the differences between the two solutions. Check these results with Matlab's \lstinline|ode45| integrator.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -146,7 +146,7 @@ We find $\{ x_1, x_2 \} = \{ 0.5000000000, 0.2499999046 \}$. For curiosity's sak
 
 \subsection{Problem 2}
 
-We find $F''(0) = \{0.64208, 0.41967\}$ for $\text{Pr} = \{1, 10\}$. Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable are presented in \figref{fig:prob2_plots}.
+We find $F''(0) = \{0.64208, 0.41967\}$ for $\text{Pr} = \{1, 10\}$ using our own RK4 method. The same root-finding procedure using Matlab's \lstinline|ode45| integrator yields $F''(0) = \{0.64214, 0.41993\}$ for the corresponding values of Pr. Plots of $F$, $F'$, and $\theta$ as functions of the similarity variable are presented in \figref{fig:prob2_plots}.
 
 \begin{figure}[h!]
 \begin{center}
@@ -173,17 +173,17 @@ Furthermore, in solving the $x_2$-equation in \eqref{eq:prob1rewrite} directly r
 
 \subsection{Problem 2}
 
-For both $\text{Pr} = 1$ and $\text{Pr} = 10$, the root finder performs well. The boundary conditions $F' \rightarrow 0$ and $\theta \rightarrow 0$ as $\eta \rightarrow \infty$ are satisfied within an absolute tolerance of less than $10^{-5}$.
+For both $\text{Pr} = 1$ and $\text{Pr} = 10$, and for both methods (RK4 and \lstinline|ode45|), the root finder performs well. The boundary conditions $F' \rightarrow 0$ and $\theta \rightarrow 0$ as $\eta \rightarrow \infty$ are satisfied within an absolute tolerance of less than $10^{-5}$. Agreement with Matlab's \lstinline|ode45| solver is within 0.1\% for values of $F''(0)$.
 
 Initial attempts at solving this problem encountered two difficulties: high sensitivity of the secant method to the initial guesses for $F''(0)$, and stability of the RK4 method. For $\text{Pr} = \{1, 10\}$, the initial guess intervals were $[0.60, 0.61]$ and $[0.41, 0.46]$, respectively. For most values of $\eta$ greater than the upper bound on these relatively small intervals, the RK4 method was unstable, causing the value of $F'(10)$ to blow up and the root finder to fail. This experience demonstrates the importance of understanding the interplay of all numerical methods used in a problem where multiple techniques are employed. As such, shooting methods may not be the best choice for all boundary-value problems, and there are likely cases where finite difference, finite element, or spectral methods are preferred.
 
 To discuss differences between Prandtl numbers, we note that $F$ is the dimensionless stream function (thus $F'$ is the velocity) and $\theta$ is the dimensionless temperature. Furthermore, the similarity variable $\eta$ is proportional to $y$, the distance to the surface. For details on problem formulation, see Ishak (2010).
 
-Since the Prandtl number is the ratio of viscous to thermal diffusion rates, we expect a flow with high Prandtl number to diffuse heat more slowly than momentum. This is indeed the case: the thermal boundary layer is much smaller (less developed due to lower thermal diffusivity) for our $\text{Pr} = 10$ case, meaning a steeper temperature gradient near the wall and thus a higher rate of convective heat transfer from the surface to the fluid.
+Since the Prandtl number is the ratio of viscous to thermal diffusion rates, we expect a flow with $\text{Pr} \gg 1$ to diffuse heat more slowly than momentum. This is indeed the case: the thermal boundary layer is much smaller (less developed due to lower thermal diffusivity) for our $\text{Pr} = 10$ case, meaning a steeper temperature gradient near the wall and thus a higher rate of convective heat transfer from the surface to the fluid.
 
-The same trend manifests in the behavior of $F'$, in that the lower $\text{Pr} = 1$ case has a higher maximum velocity near the surface because momentum diffusivity is higher for that case.
+The same trend manifests in the behavior of $F'$, in that the lower $\text{Pr} = 1$ case has a smaller momentum thickness (the $\eta$ at which $F'$ drops to near zero) near the surface because momentum diffusivity is lower. Conversely, the $\text{Pr} = 10$ case has non-zero $F'$ for much higher values of $\eta$ due to higher momentum diffusivity.
 
-Of course, as $\eta \rightarrow \infty$, both velocity and temperature approach their free-stream values regardless of Prandtl number.
+It is interesting to note that for $\text{Pr} = 1$, momentum and thermal diffusivity are equal, and both $F'$ and $\theta$ drop to values near zero at roughly the same $\eta$. Of course, as $\eta \rightarrow \infty$, both velocity and temperature approach their free-stream values regardless of Prandtl number.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
